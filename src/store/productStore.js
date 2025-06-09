@@ -67,3 +67,7 @@ exports.getLeastOrderedProduct = () => {
 exports.getInventoryStatus = () => {
   return Product.find().select('name quantity').sort({ name: 1 });
 };
+
+exports.deleteProduct = (productId) => {
+  return Product.findByIdAndDelete(productId);
+};

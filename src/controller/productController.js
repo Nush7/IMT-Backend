@@ -110,3 +110,23 @@ exports.getAnalytics = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.deleteProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedProduct = await productService.deleteProduct(id);
+    res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully',
+      data: toProductResponseDTO(deletedProduct)
+    });
+  } catch (err) {
+    if (err.message === 'Product not found') {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found'
+      });
+    }
+    next(err);
+  }
+};

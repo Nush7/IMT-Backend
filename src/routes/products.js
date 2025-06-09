@@ -7,6 +7,7 @@ const { validateCreateProduct, validateUpdateProduct } = require('../middleware/
 router.post('/v1/', authMiddleware('admin'), validateCreateProduct, productController.createProduct);
 router.put('/v1/:id', authMiddleware('admin'), validateUpdateProduct, productController.updateProduct);
 router.put('/v1/:id/quantity', authMiddleware('admin'), productController.updateQuantity);
+router.delete('/v1/:id', authMiddleware('admin'), productController.deleteProduct);
 router.post('/v1/checkout', authMiddleware(), productController.checkout);
 router.get('/v1/', productController.getProducts);
 router.get('/v1/analytics', authMiddleware('admin'), productController.getAnalytics);

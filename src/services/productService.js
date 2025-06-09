@@ -72,3 +72,9 @@ exports.getAnalytics = async () => {
     }))
   };
 };
+
+exports.deleteProduct = async (productId) => {
+  const deletedProduct = await productStore.deleteProduct(productId);
+  if (!deletedProduct) throw new Error('Product not found');
+  return deletedProduct;
+};
