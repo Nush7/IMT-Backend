@@ -1,9 +1,11 @@
 const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/authController');
+const { validateSignup, validateSignin } = require('../middleware/validation');
+const authController = require('../controller/authController');
 
-// Public routes
-router.post('/signup', authController.signup);
-router.post('/login', authController.login);
+const router = express.Router();
+
+router.post('/v1/signup', validateSignup, authController.signup);
+router.post('/v1/signin', validateSignin, authController.signin);
+router.post('/v1/logout', authController.logout);
 
 module.exports = router;

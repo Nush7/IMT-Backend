@@ -5,11 +5,34 @@ exports.createProduct = (data) => {
   return product.save();
 };
 
+exports.findById = (productId) => {
+  return Product.findById(productId);
+};
+
 exports.updateProductQuantity = (productId, quantity) => {
   return Product.findByIdAndUpdate(
     productId,
     { quantity },
     { new: true }
+  );
+};
+
+exports.updateProductAfterCheckout = (productId, newQuantity, orderQuantity) => {
+  return Product.findByIdAndUpdate(
+    productId,
+    {
+      quantity: newQuantity,
+      $inc: { totalOrders: orderQuantity }
+    },
+    { new: true }
+  );
+};
+
+exports.updateProduct = (productId, updateData) => {
+  return Product.findByIdAndUpdate(
+    productId,
+    updateData,
+    { new: true, runValidators: true }
   );
 };
 

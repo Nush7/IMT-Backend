@@ -7,19 +7,47 @@ exports.signup = async ({ username, password, role }) => {
   if (existingUser) throw new Error('Username already taken');
 
   const hashedPassword = await bcrypt.hashPassword(password);
-  const newUser = await userStore.createUser({ username, password: hashedPassword, role });
+  const newUser = await userStore.createUser({ 
+    username, 
+    password: hashedPassword, 
+    role 
+  });
 
-  const token = jwt.generateToken({ id: newUser._id, role: newUser.role });
-  return { token };
+  const token = jwt.generateToken({ 
+    id: newUser._id, 
+    username: newUser.username,
+    role: newUser.role 
+  });
+  
+  return { 
+    user: {
+      id: newUser._id,
+      username: newUser.username,
+      role: newUser.role
+    },
+    token 
+  };
 };
 
-exports.login = async ({ username, password }) => {
+exports.signin = async ({ username, password }) => {
   const user = await userStore.findByUsername(username);
   if (!user) throw new Error('Invalid credentials');
 
   const isMatch = await bcrypt.comparePasswords(password, user.password);
   if (!isMatch) throw new Error('Invalid credentials');
 
-  const token = jwt.generateToken({ id: user._id, role: user.role });
-  return { token };
+  const token = jwt.generateToken({ 
+    id: user._id, 
+    username: user.username,
+    role: user.role 
+  });
+  
+  return { 
+    user: {
+      id: user._id,
+      username: user.username,
+      role: user.role
+    },
+    token 
+  };
 };

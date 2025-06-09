@@ -1,22 +1,35 @@
 const jwt = require('../utils/jwt');
 
-module.exports = (requiredRole = null) => {
-  return (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ message: 'No token provided' });
-    }
-
-    const token = authHeader.split(' ')[1];
+const authMiddleware = (requiredRole = null) => {
+  return async (req, res, next) => {
     try {
-      const decoded = jwt.verifyToken(token);
-      if (requiredRole && decoded.role !== requiredRole) {
-        return res.status(403).json({ message: 'Access denied' });
+      const token = req.header('Authorization')?.replace('Bearer ', '');
+      
+      if (!token) {
+        return res.status(401).json({
+          success: false,
+          message: 'Access denied. No token provided.'
+        });
       }
-      req.user = decoded; // attach user data
+
+      const decoded = jwt.verifyToken(token);
+      req.user = decoded;
+
+      if (requiredRole && req.user.role !== requiredRole) {
+        return res.status(403).json({
+          success: false,
+          message: 'Access denied. Insufficient permissions.'
+        });
+      }
+
       next();
-    } catch (err) {
-      return res.status(401).json({ message: 'Invalid or expired token' });
+    } catch (error) {
+      res.status(401).json({
+        success: false,
+        message: 'Invalid token.'
+      });
     }
   };
 };
+
+module.exports = authMiddleware;
