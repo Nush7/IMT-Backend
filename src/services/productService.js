@@ -37,3 +37,38 @@ exports.updateProduct = async (productId, updateData) => {
   if (!updatedProduct) throw new Error('Product not found');
   return updatedProduct;
 };
+
+exports.getAnalytics = async () => {
+  const [
+    totalProducts,
+    totalOrdersResult,
+    mostOrdered,
+    leastOrdered,
+    inventoryStatus
+  ] = await Promise.all([
+    productStore.getTotalProductsCount(),
+    productStore.getTotalOrders(),
+    productStore.getMostOrderedProduct(),
+    productStore.getLeastOrderedProduct(),
+    productStore.getInventoryStatus()
+  ]);
+
+  const totalOrders = totalOrdersResult.length > 0 ? totalOrdersResult[0].totalOrders : 0;
+
+  return {
+    totalProducts,
+    totalOrders,
+    mostOrdered: mostOrdered ? {
+      name: mostOrdered.name,
+      quantity: mostOrdered.totalOrders
+    } : null,
+    leastOrdered: leastOrdered ? {
+      name: leastOrdered.name,
+      quantity: leastOrdered.totalOrders
+    } : null,
+    inventoryStatus: inventoryStatus.map(product => ({
+      name: product.name,
+      quantity: product.quantity
+    }))
+  };
+};

@@ -40,3 +40,30 @@ exports.getAllProducts = (page = 1, limit = 10) => {
   const skip = (page - 1) * limit;
   return Product.find().skip(skip).limit(limit);
 };
+
+exports.getTotalProductsCount = () => {
+  return Product.countDocuments();
+};
+
+exports.getTotalOrders = () => {
+  return Product.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalOrders: { $sum: '$totalOrders' }
+      }
+    }
+  ]);
+};
+
+exports.getMostOrderedProduct = () => {
+  return Product.findOne().sort({ totalOrders: -1 }).select('name totalOrders');
+};
+
+exports.getLeastOrderedProduct = () => {
+  return Product.findOne({ totalOrders: { $gt: 0 } }).sort({ totalOrders: 1 }).select('name totalOrders');
+};
+
+exports.getInventoryStatus = () => {
+  return Product.find().select('name quantity').sort({ name: 1 });
+};

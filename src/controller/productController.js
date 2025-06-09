@@ -97,3 +97,16 @@ exports.updateProduct = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getAnalytics = async (req, res, next) => {
+  try {
+    const analytics = await productService.getAnalytics();
+    res.status(200).json({
+      success: true,
+      message: 'Analytics retrieved successfully',
+      data: analytics
+    });
+  } catch (err) {
+    next(err);
+  }
+};
