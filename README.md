@@ -10,40 +10,39 @@ A small backend application to manage inventory for a small business.
 
 ## Getting Started
 
-### Prerequisites
-- Node.js (v16 or higher recommended)
-- MongoDB database (local or Atlas)
+To start the backend locally:
 
-### Installation
-1. Clone the repository:
+1. **Clone the repository:**
    ```sh
    git clone https://github.com/Nush7/IMT-Backend.git
    cd IMT-Backend
    ```
-2. Install dependencies:
+2. **Install dependencies:**
    ```sh
    npm install
    ```
-3. Copy `.env.example` to `.env` and fill in your environment variables:
+3. **Set up environment variables:**
+   - Copy `.env.example` to `.env` and fill in the required values.
    ```sh
    cp .env.example .env
    ```
+   - Or create a `.env` file manually using the variables listed above.
+4. **Start the backend server:**
+   ```sh
+   npm start
+   ```
+   The server will run on `http://localhost:3000` by default.
 
-### Environment Variables
-| Variable              | Description                        |
-|---------------------- |------------------------------------|
-| PORT                  | Server port (default: 3000)        |
-| NODE_ENV              | Environment (development/production)|
-| JWT_SECRET            | Secret key for JWT                 |
-| JWT_EXPIRES_IN        | JWT expiration (e.g., 7d, 24h)     |
-| DB_CONNECTION_STRING  | MongoDB connection string          |
-| CORS_ORIGIN           | Allowed CORS origin                |
-
-### Running the Server
-```sh
-npm start
-```
-The server will run on `http://localhost:3000` by default.
+### To run with Docker:
+1. **Build the Docker image:**
+   ```sh
+   docker build -t imt-backend .
+   ```
+2. **Run the container:**
+   ```sh
+   docker run --env-file .env -p 3000:3000 imt-backend
+   ```
+   The backend will be available at `http://localhost:3000`.
 
 ## API Endpoints
 
