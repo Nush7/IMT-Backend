@@ -62,6 +62,13 @@ To start the backend locally:
 ### Health Check
 - `GET /health` – Check server status
 
+## API Documentation (Swagger)
+
+Interactive API docs are available via Swagger UI after starting the backend:
+
+- Visit: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+- You can view, try, and test all endpoints directly from the browser.
+
 ## Authentication
 All protected routes require a JWT in the `Authorization` header:
 ```
